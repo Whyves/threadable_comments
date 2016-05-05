@@ -15,7 +15,7 @@ Migrations
 ----------
 * To install:
 
-        rails generate threadable_comments_migration
+        rails generate threadable_comments:migration
 
     This will generate the migration script necessary for the table
 
