@@ -15,7 +15,7 @@ describe ThreadableComments do
     end
 
     after(:example) do
-      Comment.destroy_all
+      ThreadableComments::Comment.destroy_all
     end
 
     it 'can be commented upon' do
@@ -23,6 +23,14 @@ describe ThreadableComments do
       expect(last_comment.text).to eq('This is my comment')
       expect(last_comment.commentable).to eq(commentable)
       expect(last_comment.user_id).to eq(user.id)
+      expect(last_comment.parameters.empty?).to be_truthy
+    end
+
+    it 'accepts parameter hash' do
+      new_comment = commentable.add_comment('My Comment', user, param1: true, param2: 'My Param')
+
+      expect(new_comment.parameters[:param1]).to be_truthy
+      expect(new_comment.parameters[:param2]).to eq('My Param')
     end
 
     it 'lists the comments by creation date' do
@@ -42,12 +50,12 @@ describe ThreadableComments do
 
     describe 'when it is destroyed' do
       it 'destroys its own root comments along with their children' do
-        expect{commentable.destroy}.to change{Comment.count}.by(-4)
+        expect{commentable.destroy}.to change{ThreadableComments::Comment.count}.by(-4)
       end
 
       it 'does not destroy other root comments' do
         commentable.destroy
-        expect(Comment.count).to eq(1)
+        expect(ThreadableComments::Comment.count).to eq(1)
       end
     end
   end

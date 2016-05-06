@@ -1,14 +1,13 @@
 require 'active_record'
-
-require_relative 'threadable_comments/version'
-require_relative 'threadable_comments/comment'
+require 'threadable_comments/version'
+require 'threadable_comments/comment'
 
 module ThreadableComments
   extend ActiveSupport::Concern
 
   module ClassMethods
     def has_threadable_comments
-      has_many :comments, as: :commentable, dependent: :destroy
+      has_many :comments, class_name: '::ThreadableComments::Comment', as: :commentable, dependent: :destroy
       include ThreadableComments::InstanceMethods
     end
   end
@@ -26,8 +25,11 @@ module ThreadableComments
       comments.where(user_id: user.id)
     end
 
-    def add_comment(text, user)
-      new_comment = Comment.create(commentable: self, text: text, user_id: user.id)
+    def add_comment(text, user, parameters = {})
+      new_comment = ThreadableComments::Comment.create(commentable: self,
+                                                       text: text,
+                                                       user_id: user.id,
+                                                       parameters: parameters)
       comments << new_comment
       new_comment
     end

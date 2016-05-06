@@ -1,14 +1,14 @@
 require 'rspec'
 
-describe Comment do
+describe ThreadableComments::Comment do
 
   let(:user) {User.create!}
   let(:commentable) {Commentable.create!}
 
-  let(:comment) {Comment.create(commentable: commentable, user: user, text: 'This is a comment')}
+  let(:comment) {ThreadableComments::Comment.create(commentable: commentable, user: user, text: 'This is a comment')}
 
   after(:example) do
-    Comment.destroy_all
+    ThreadableComments::Comment.destroy_all
   end
 
 
@@ -41,7 +41,7 @@ describe Comment do
   it 'destroys all of its children and their descendants' do
     comment.reply('this is a reply!', user).reply('this is a sub reply!', user)
 
-    expect{comment.destroy}.to change{Comment.count}.by(-3)
+    expect{comment.destroy}.to change{ThreadableComments::Comment.count}.by(-3)
   end
 
   it 'retrieves all comments for a particular user' do
@@ -49,9 +49,9 @@ describe Comment do
     comment.reply('this is a reply!', user)
     comment.reply('this is the other user reply!', other_user)
 
-    expect(Comment.count).to eq(3)
-    expect(Comment.by_user(other_user).count).to eq(1)
-    expect(Comment.by_user(user).count).to eq(2)
+    expect(ThreadableComments::Comment.count).to eq(3)
+    expect(ThreadableComments::Comment.by_user(other_user).count).to eq(1)
+    expect(ThreadableComments::Comment.by_user(user).count).to eq(2)
   end
 
 end
