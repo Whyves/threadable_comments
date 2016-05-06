@@ -6,9 +6,9 @@ Gem::Specification.new do |s|
   s.version     = ThreadableComments::VERSION
   s.authors     = ["Yves Riel"]
   s.email       = ["whyves@okapya.com"]
-  s.homepage    = "https://github.com/Whyves/acts_as_commentable_with_threading"
-  s.summary     = "Summary of ThreadableComments."
-  s.description = "Description of ThreadableComments."
+  s.homepage    = "https://github.com/Whyves/threadable_comments"
+  s.summary     = "Allow then creation of comment thread"
+  s.description = "Create comments along with their threads on any commentable object. Use Ancestry gem."
   s.license     = "MIT"
 
   s.files = `git ls-files`.split("\n")
