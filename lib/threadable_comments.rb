@@ -8,7 +8,7 @@ module ThreadableComments
 
   module ClassMethods
     def has_threadable_comments
-      has_many :comments, -> {order('created_at DESC')}, as: :commentable, dependent: :destroy
+      has_many :comments, as: :commentable, dependent: :destroy
       include ThreadableComments::InstanceMethods
     end
   end
@@ -23,7 +23,7 @@ module ThreadableComments
     def comments_by(user)
       raise ArgumentError.new("User must have an ID property") unless user.respond_to? :id
 
-      comments.where(user_id: user.id).order('created_at DESC')
+      comments.where(user_id: user.id)
     end
 
     def add_comment(text, user)
